@@ -7,18 +7,29 @@
 //
 
 import UIKit
+import CircularSlider
 
 class ViewController: UIViewController {
 
+    var cs: UICircularSliderView! = nil
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+        
+        cs = UICircularSliderView(frame: CGRect(x: 50, y: 50, width: 300, height: 300))
+        cs.backgroundColor = .red
+        self.view.addSubview(cs)
+        
+        cs.setBackCircle(inRect: cs.bounds, radius: 100, minAngle: CGFloat.pi, maxAngle: CGFloat.pi * 2, clockwise: true, lineWidth: 3, color: UIColor.white, lineCapStyle: CGLineCap.round)
+        cs.setFrontCircle(inRect: cs.bounds, radius: 100, minAngle: CGFloat.pi, maxAngle: CGFloat.pi * 2, clockwise: true, lineWidth: 3, color: UIColor.blue, lineCapStyle: CGLineCap.round)
+        
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(true)
+        
+        cs.animateBackCircle(toPosition: 1, duration: 1.0)
+        cs.animateFrontCircle(toPosition: 0.5, duration: 1.0)
     }
-
 }
 

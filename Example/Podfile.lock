@@ -1,0 +1,16 @@
+PODS:
+  - CircularSlider (0.1.0)
+
+DEPENDENCIES:
+  - CircularSlider (from `../`)
+
+EXTERNAL SOURCES:
+  CircularSlider:
+    :path: ../
+
+SPEC CHECKSUMS:
+  CircularSlider: d4cb6ba70d0d10993074a288732f5ba2b9e5e164
+
+PODFILE CHECKSUM: 9635fee135fb9ce98539deacb26b1b036b2a8cb3
+
+COCOAPODS: 1.4.0

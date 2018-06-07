@@ -1,0 +1,22 @@
+{
+  "name": "CircularSlider",
+  "version": "0.1.0",
+  "summary": "A short description of CircularSlider.",
+  "description": "TODO: Add long description of the pod here.",
+  "homepage": "https://github.com/anselmjosephs@gmail.com/CircularSlider",
+  "license": {
+    "type": "MIT",
+    "file": "LICENSE"
+  },
+  "authors": {
+    "anselmjosephs@gmail.com": "anselmjosephs@gmail.com"
+  },
+  "source": {
+    "git": "https://github.com/anselmjosephs@gmail.com/CircularSlider.git",
+    "tag": "0.1.0"
+  },
+  "platforms": {
+    "ios": "8.0"
+  },
+  "source_files": "CircularSlider/Classes/**/*"
+}
