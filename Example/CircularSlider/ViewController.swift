@@ -20,8 +20,8 @@ class ViewController: UIViewController {
         cs.backgroundColor = .red
         self.view.addSubview(cs)
         
-        cs.setBackCircle(inRect: cs.bounds, radius: 100, minAngle: CGFloat.pi, maxAngle: CGFloat.pi * 2, clockwise: true, lineWidth: 3, color: UIColor.white, lineCapStyle: CGLineCap.round)
-        cs.setFrontCircle(inRect: cs.bounds, radius: 100, minAngle: CGFloat.pi, maxAngle: CGFloat.pi * 2, clockwise: true, lineWidth: 3, color: UIColor.blue, lineCapStyle: CGLineCap.round)
+        cs.setBackCircle(inRect: cs.bounds, radius: 100, minAngle: 0, maxAngle: CGFloat.pi * 2, clockwise: true, lineWidth: 10, color: UIColor.white, lineCapStyle: CGLineCap.round)
+        cs.setFrontCircle(inRect: cs.bounds, radius: 100, minAngle: 0, maxAngle: CGFloat.pi * 2, clockwise: true, lineWidth: 10, color: UIColor.blue, lineCapStyle: CGLineCap.round)
         
     }
 
@@ -29,7 +29,7 @@ class ViewController: UIViewController {
         super.viewDidAppear(true)
         
         cs.animateBackCircle(toPosition: 1, duration: 1.0)
-        cs.animateFrontCircle(toPosition: 0.5, duration: 1.0)
+        cs.animateFrontCircle(toPosition: 1, duration: 1.0)
     }
 }
 

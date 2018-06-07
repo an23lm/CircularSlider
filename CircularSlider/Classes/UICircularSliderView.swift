@@ -32,8 +32,16 @@ public class UICircularSliderView: UIView {
     private(set) public var frontCircleBezierPath: UIBezierPath? = nil
     private(set) public var frontCircleShapeLayer: CAShapeLayer? = nil
     
-//    private func getArcCenter(for rect: CGRect, minAngle: CGFloat, maxAngle: CGFloat, clockwise: Bool) {
-//        
+    private func getDegree(fromRadians number: CGFloat) -> CGFloat {
+        return number * 180 / .pi
+    }
+    
+//    private func getArcCenter(for rect: CGRect, radius: CGFloat, minAngle: CGFloat, maxAngle: CGFloat, clockwise: Bool) {
+//        let minAnglePositionY = radius * sin(getDegree(fromRadians: minAngle))
+//        let maxAnglePositionY = radius * sin(getDegree(fromRadians: maxAngle))
+//        print(minAnglePositionY + rect.height)
+//        print(maxAnglePositionY + rect.height)
+//
 //    }
     
     public func setBackCircle(inRect frame: CGRect, radius: CGFloat, minAngle: CGFloat, maxAngle: CGFloat, clockwise: Bool, lineWidth: CGFloat, color: UIColor, lineCapStyle: CGLineCap) {
@@ -74,7 +82,7 @@ public class UICircularSliderView: UIView {
         frontCircleRadius = radius
         frontCircleStartAngle = minAngle
         frontCircleEndAngle = maxAngle
-        
+    
         frontCircleBezierPath = UIBezierPath(arcCenter: CGPoint(x: frame.midX, y: frame.midY), radius: radius, startAngle: minAngle, endAngle: maxAngle, clockwise: clockwise)
         frontCircleBezierPath?.lineCapStyle = lineCapStyle
         
@@ -98,5 +106,46 @@ public class UICircularSliderView: UIView {
         frontCircleCurrentStrokeEnd = toPosition
         frontCircleShapeLayer?.strokeEnd = toPosition
         frontCircleShapeLayer?.add(animation, forKey: "front.stroke.end")
+    }
+    
+    public override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesBegan(touches, with: event)
+        for touch in touches {
+            let point = touch.location(in: self)
+            if backCircleBezierPath!.contains(point) {
+                print("contains")
+                let centeredPoint = CGPoint(x: (point.x - frame.width/2), y: (point.y - frame.height/2))
+                print(centeredPoint)
+                var rads = atan(centeredPoint.y/centeredPoint.x)
+                if centeredPoint.x < 0 {
+                    rads += CGFloat.pi
+                } else if centeredPoint.x > 0 && centeredPoint.y < 0 {
+                    rads += CGFloat.pi * 2
+                }
+                let perc = (rads - backCircleStartAngle) / abs(backCircleStartAngle - backCircleEndAngle)
+                frontCircleShapeLayer?.strokeEnd = perc
+            }
+        }
+    }
+    
+    public override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesMoved(touches, with: event)
+        for touch in touches {
+//            print(touch.location(in: self))
+        }
+    }
+    
+    public override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesEnded(touches, with: event)
+        for touch in touches {
+//            print(touch.location(in: self))
+        }
+    }
+    
+    public override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesCancelled(touches, with: event)
+        for touch in touches {
+//            print(touch.location(in: self))
+        }
     }
 }
