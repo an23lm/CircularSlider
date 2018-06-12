@@ -7,8 +7,8 @@
 #
 
 Pod::Spec.new do |s|
-  s.name             = 'CircularSlider'
-  s.version          = '0.1.0'
+  s.name             = 'CircularSliderProgress'
+  s.version          = '0.1.23'
   s.summary          = 'A simply circular slider written in Swift.'
 
 # This description is used to generate tags and improve search results.
@@ -17,9 +17,7 @@ Pod::Spec.new do |s|
 #   * Write the description between the DESC delimiters below.
 #   * Finally, don't worry about the indent, CocoaPods strips it!
 
-  s.description      = <<-DESC
-TODO: Add long description of the pod here.
-                       DESC
+  # s.description      = <<-DESC
 
   s.homepage         = 'https://github.com/an23lm/CircularSlider'
   # s.screenshots     = 'www.example.com/screenshots_1', 'www.example.com/screenshots_2'
@@ -29,7 +27,6 @@ TODO: Add long description of the pod here.
   s.social_media_url = 'https://twitter.com/an23lm'
 
   s.ios.deployment_target = '8.0'
-
   s.source_files = 'CircularSlider/Classes/**/*'
   
   # s.resource_bundles = {
@@ -37,6 +34,6 @@ TODO: Add long description of the pod here.
   # }
 
   # s.public_header_files = 'Pod/Classes/**/*.h'
-  # s.frameworks = 'UIKit', 'MapKit'
+  s.frameworks = 'UIKit'
   # s.dependency 'AFNetworking', '~> 2.3'
 end

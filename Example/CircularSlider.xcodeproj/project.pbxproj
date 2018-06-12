@@ -28,7 +28,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		0D95A05EE407B4BB10F63DB1 /* CircularSlider.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = CircularSlider.podspec; path = ../CircularSlider.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		0D95A05EE407B4BB10F63DB1 /* CircularSliderProgress.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = CircularSliderProgress.podspec; path = ../CircularSliderProgress.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		333850C5BCD05E9BC4D87198 /* Pods_CircularSlider_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CircularSlider_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		56E6F087B85B0CA31EB40D35 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 		5FBEA47CEC37AD8FBC7139D2 /* Pods-CircularSlider_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CircularSlider_Example.release.xcconfig"; path = "Pods/Target Support Files/Pods-CircularSlider_Example/Pods-CircularSlider_Example.release.xcconfig"; sourceTree = "<group>"; };
@@ -132,7 +132,7 @@
 		607FACF51AFB993E008FA782 /* Podspec Metadata */ = {
 			isa = PBXGroup;
 			children = (
-				0D95A05EE407B4BB10F63DB1 /* CircularSlider.podspec */,
+				0D95A05EE407B4BB10F63DB1 /* CircularSliderProgress.podspec */,
 				6EFF5ED683122CDFBBE6C93C /* README.md */,
 				56E6F087B85B0CA31EB40D35 /* LICENSE */,
 			);
