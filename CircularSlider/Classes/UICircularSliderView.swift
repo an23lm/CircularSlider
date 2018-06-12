@@ -10,14 +10,14 @@ import UIKit
 @IBDesignable
 public class UICircularSliderView: UIView {
  
-    @IBInspectable public var radius: CGFloat = 0
-    @IBInspectable public var startAngle: CGFloat = 0
-    @IBInspectable public var endAngle: CGFloat = 0
-    @IBInspectable public var strokeWidth: CGFloat = 0
-    @IBInspectable public var clockwise: Bool = true
-    @IBInspectable public var lineCap: String = kCALineCapSquare
-    @IBInspectable public var bgStrokeColor: UIColor = UIColor.darkGray
-    @IBInspectable public var fgStrokeColor: UIColor = UIColor.cyan
+    @IBInspectable public var radius: CGFloat = 0 { didSet { setNeedsDisplay() } }
+    @IBInspectable public var startAngle: CGFloat = 0 { didSet { setNeedsDisplay() } }
+    @IBInspectable public var endAngle: CGFloat = 0 { didSet { setNeedsDisplay() } }
+    @IBInspectable public var strokeWidth: CGFloat = 0 { didSet { setNeedsDisplay() } }
+    @IBInspectable public var clockwise: Bool = true { didSet { setNeedsDisplay() } }
+    @IBInspectable public var lineCap: String = kCALineCapSquare { didSet { setNeedsDisplay() } }
+    @IBInspectable public var bgStrokeColor: UIColor = UIColor.darkGray { didSet { setNeedsDisplay() } }
+    @IBInspectable public var fgStrokeColor: UIColor = UIColor.cyan { didSet { setNeedsDisplay() } }
     
     private(set) public var placeholderArcCurrentStrokeEnd: CGFloat = 0
     private(set) public var progressArcCurrentStrokeEnd: CGFloat = 0
@@ -76,7 +76,7 @@ public class UICircularSliderView: UIView {
         placeholderArcShapeLayer?.path = placeholderArcBezierPath?.cgPath
         placeholderArcShapeLayer?.lineWidth = strokeWidth
         placeholderArcShapeLayer?.strokeStart = 0
-        placeholderArcShapeLayer?.strokeEnd = 0
+        placeholderArcShapeLayer?.strokeEnd = placeholderArcCurrentStrokeEnd
         placeholderArcShapeLayer?.strokeColor = bgStrokeColor.cgColor
         placeholderArcShapeLayer?.fillColor = UIColor.clear.cgColor
         placeholderArcShapeLayer?.lineCap = lineCap
@@ -94,9 +94,10 @@ public class UICircularSliderView: UIView {
         progressArcShapeLayer?.path = progressArcBezierPath?.cgPath
         progressArcShapeLayer?.lineWidth = strokeWidth
         progressArcShapeLayer?.strokeStart = 0
-        progressArcShapeLayer?.strokeEnd = 0
+        progressArcShapeLayer?.strokeEnd = progressArcCurrentStrokeEnd
         progressArcShapeLayer?.strokeColor = fgStrokeColor.cgColor
         progressArcShapeLayer?.fillColor = UIColor.clear.cgColor
+        progressArcShapeLayer?.lineCap = lineCap
         
         layer.addSublayer(progressArcShapeLayer!)
     }
@@ -144,7 +145,7 @@ public class UICircularSliderView: UIView {
     
     public override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesMoved(touches, with: event)
-        for touch in touches {
+        if let touch = touches.first {
             let point = touch.location(in: self)
             if placeholderArcBezierPath!.contains(point) {
                 let centeredPoint = CGPoint(x: (point.x - frame.width/2), y: (point.y - frame.height/2))
@@ -157,6 +158,7 @@ public class UICircularSliderView: UIView {
                 }
                 let perc = (rads - startAngle) / abs(startAngle - endAngle)
                 progressArcShapeLayer?.strokeEnd = perc
+                progressArcCurrentStrokeEnd = perc
             }
         }
     }

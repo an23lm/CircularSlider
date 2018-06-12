@@ -16,8 +16,9 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        cs = UICircularSliderView(radius: 100, startAngle: .pi, endAngle: .pi * 2, clockwise: true, strokeWidth: 5, backgroundStrokeColor: .gray, foregroundStrokeColor: .blue)
-        cs.frame = CGRect(x: 100, y: 200, width: 300, height: 300)
+        cs = UICircularSliderView(radius: 100, startAngle: .pi, endAngle: .pi * 2, clockwise: true, strokeWidth: 10, backgroundStrokeColor: .gray, foregroundStrokeColor: .blue)
+        cs.frame = CGRect(x: 50, y: 200, width: 300, height: 300)
+        cs.lineCap = kCALineCapRound
         self.view.addSubview(cs)
     }
 
