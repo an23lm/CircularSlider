@@ -15,6 +15,7 @@ public class UICircularSliderView: UIView {
     @IBInspectable public var endAngle: CGFloat = 0
     @IBInspectable public var strokeWidth: CGFloat = 0
     @IBInspectable public var clockwise: Bool = true
+    @IBInspectable public var lineCap: String = kCALineCapSquare
     @IBInspectable public var bgStrokeColor: UIColor = UIColor.darkGray
     @IBInspectable public var fgStrokeColor: UIColor = UIColor.cyan
     
@@ -45,8 +46,9 @@ public class UICircularSliderView: UIView {
     }
     
     public convenience init(radius: CGFloat, startAngle: CGFloat, endAngle: CGFloat, clockwise: Bool, strokeWidth: CGFloat, backgroundStrokeColor: UIColor, foregroundStrokeColor: UIColor) {
-        
         self.init(frame: CGRect(origin: CGPoint.zero, size: CGSize(width: 100, height: 100)))
+        
+        self.backgroundColor = .white
         
         self.radius = radius
         self.startAngle = startAngle
@@ -68,6 +70,7 @@ public class UICircularSliderView: UIView {
         placeholderArcShapeLayer?.removeFromSuperlayer()
         
         placeholderArcBezierPath = UIBezierPath(arcCenter: CGPoint(x: frame.width/2, y: frame.height/2), radius: radius, startAngle: startAngle, endAngle: endAngle, clockwise: clockwise)
+        placeholderArcBezierPath?.lineWidth = strokeWidth
         
         placeholderArcShapeLayer = CAShapeLayer()
         placeholderArcShapeLayer?.path = placeholderArcBezierPath?.cgPath
@@ -76,6 +79,7 @@ public class UICircularSliderView: UIView {
         placeholderArcShapeLayer?.strokeEnd = 0
         placeholderArcShapeLayer?.strokeColor = bgStrokeColor.cgColor
         placeholderArcShapeLayer?.fillColor = UIColor.clear.cgColor
+        placeholderArcShapeLayer?.lineCap = lineCap
         
         layer.addSublayer(placeholderArcShapeLayer!)
     }
@@ -84,6 +88,7 @@ public class UICircularSliderView: UIView {
         progressArcShapeLayer?.removeFromSuperlayer()
         
         progressArcBezierPath = UIBezierPath(arcCenter: CGPoint(x: frame.width/2, y: frame.height/2), radius: radius, startAngle: startAngle, endAngle: endAngle, clockwise: clockwise)
+        progressArcBezierPath?.lineWidth = strokeWidth
         
         progressArcShapeLayer = CAShapeLayer()
         progressArcShapeLayer?.path = progressArcBezierPath?.cgPath
@@ -118,12 +123,30 @@ public class UICircularSliderView: UIView {
         progressArcShapeLayer?.add(animation, forKey: "front.stroke.end")
     }
     
-    public override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        super.touchesBegan(touches, with: event)
+//    public override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+//        super.touchesBegan(touches, with: event)
+//        for touch in touches {
+//            let point = touch.location(in: self)
+//            if placeholderArcShapeLayer!.contains(point) {
+//                let centeredPoint = CGPoint(x: (point.x - frame.width/2), y: (point.y - frame.height/2))
+//                print(centeredPoint)
+//                var rads = atan(centeredPoint.y/centeredPoint.x)
+//                if centeredPoint.x < 0 {
+//                    rads += CGFloat.pi
+//                } else if centeredPoint.x > 0 && centeredPoint.y < 0 {
+//                    rads += CGFloat.pi * 2
+//                }
+//                let perc = (rads - startAngle) / abs(startAngle - endAngle)
+//                progressArcShapeLayer?.strokeEnd = perc
+//            }
+//        }
+//    }
+    
+    public override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesMoved(touches, with: event)
         for touch in touches {
             let point = touch.location(in: self)
             if placeholderArcBezierPath!.contains(point) {
-                print("contains")
                 let centeredPoint = CGPoint(x: (point.x - frame.width/2), y: (point.y - frame.height/2))
                 print(centeredPoint)
                 var rads = atan(centeredPoint.y/centeredPoint.x)
@@ -138,24 +161,17 @@ public class UICircularSliderView: UIView {
         }
     }
     
-    public override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-        super.touchesMoved(touches, with: event)
-        for touch in touches {
+//    public override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+//        super.touchesEnded(touches, with: event)
+//        for touch in touches {
 //            print(touch.location(in: self))
-        }
-    }
-    
-    public override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        super.touchesEnded(touches, with: event)
-        for touch in touches {
+//        }
+//    }
+//
+//    public override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
+//        super.touchesCancelled(touches, with: event)
+//        for touch in touches {
 //            print(touch.location(in: self))
-        }
-    }
-    
-    public override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
-        super.touchesCancelled(touches, with: event)
-        for touch in touches {
-//            print(touch.location(in: self))
-        }
-    }
+//        }
+//    }
 }
