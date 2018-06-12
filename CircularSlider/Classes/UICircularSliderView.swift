@@ -10,27 +10,22 @@ import UIKit
 @IBDesignable
 public class UICircularSliderView: UIView {
  
-    @IBInspectable
-    private(set) public var backCircleRadius: CGFloat = 0
-    @IBInspectable
-    private(set) public var backCircleStartAngle: CGFloat = 0
-    @IBInspectable
-    private(set) public var backCircleEndAngle: CGFloat = 0
-    private(set) public var backCircleCurrentStrokeEnd: CGFloat = 0
+    @IBInspectable public var radius: CGFloat = 0
+    @IBInspectable public var startAngle: CGFloat = 0
+    @IBInspectable public var endAngle: CGFloat = 0
+    @IBInspectable public var strokeWidth: CGFloat = 0
+    @IBInspectable public var clockwise: Bool = true
+    @IBInspectable public var bgStrokeColor: UIColor = UIColor.darkGray
+    @IBInspectable public var fgStrokeColor: UIColor = UIColor.cyan
     
-    private(set) public var backCircleBezierPath: UIBezierPath? = nil
-    private(set) public var backCircleShapeLayer: CAShapeLayer? = nil
+    private(set) public var placeholderArcCurrentStrokeEnd: CGFloat = 0
+    private(set) public var progressArcCurrentStrokeEnd: CGFloat = 0
     
-    @IBInspectable
-    private(set) public var frontCircleRadius: CGFloat = 0
-    @IBInspectable
-    private(set) public var frontCircleStartAngle: CGFloat = 0
-    @IBInspectable
-    private(set) public var frontCircleEndAngle: CGFloat = 0
-    private(set) public var frontCircleCurrentStrokeEnd: CGFloat = 0
+    private(set) public var placeholderArcBezierPath: UIBezierPath? = nil
+    private(set) public var placeholderArcShapeLayer: CAShapeLayer? = nil
     
-    private(set) public var frontCircleBezierPath: UIBezierPath? = nil
-    private(set) public var frontCircleShapeLayer: CAShapeLayer? = nil
+    private(set) public var progressArcBezierPath: UIBezierPath? = nil
+    private(set) public var progressArcShapeLayer: CAShapeLayer? = nil
     
     private func getDegree(fromRadians number: CGFloat) -> CGFloat {
         return number * 180 / .pi
@@ -44,75 +39,90 @@ public class UICircularSliderView: UIView {
 //
 //    }
     
-    public func setBackCircle(inRect frame: CGRect, radius: CGFloat, minAngle: CGFloat, maxAngle: CGFloat, clockwise: Bool, lineWidth: CGFloat, color: UIColor, lineCapStyle: CGLineCap) {
-        backCircleShapeLayer?.removeFromSuperlayer()
-        
-        backCircleRadius = radius
-        backCircleStartAngle = minAngle
-        backCircleEndAngle = maxAngle
-        
-        backCircleBezierPath = UIBezierPath(arcCenter: CGPoint(x: frame.midX, y: frame.midY), radius: radius, startAngle: minAngle, endAngle: maxAngle, clockwise: clockwise)
-        backCircleBezierPath?.lineCapStyle = lineCapStyle
-        
-        backCircleShapeLayer = CAShapeLayer()
-        backCircleShapeLayer?.path = backCircleBezierPath?.cgPath
-        backCircleShapeLayer?.lineWidth = lineWidth
-        backCircleShapeLayer?.strokeStart = 0
-        backCircleShapeLayer?.strokeEnd = 0
-        backCircleShapeLayer?.strokeColor = color.cgColor
-        backCircleShapeLayer?.fillColor = UIColor.clear.cgColor
-        
-        layer.addSublayer(backCircleShapeLayer!)
+    public override func draw(_ rect: CGRect) {
+        drawBgArc()
+        drawFgArc()
     }
     
-    public func animateBackCircle(toPosition: CGFloat, duration: TimeInterval) {
+    public convenience init(radius: CGFloat, startAngle: CGFloat, endAngle: CGFloat, clockwise: Bool, strokeWidth: CGFloat, backgroundStrokeColor: UIColor, foregroundStrokeColor: UIColor) {
+        
+        self.init(frame: CGRect(origin: CGPoint.zero, size: CGSize(width: 100, height: 100)))
+        
+        self.radius = radius
+        self.startAngle = startAngle
+        self.endAngle = endAngle
+        self.strokeWidth = strokeWidth
+        self.bgStrokeColor = backgroundStrokeColor
+        self.fgStrokeColor = foregroundStrokeColor
+    }
+    
+    public override init(frame: CGRect) {
+        super.init(frame: frame)
+    }
+    
+    required public init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+    }
+    
+    private func drawBgArc() {
+        placeholderArcShapeLayer?.removeFromSuperlayer()
+        
+        placeholderArcBezierPath = UIBezierPath(arcCenter: CGPoint(x: frame.width/2, y: frame.height/2), radius: radius, startAngle: startAngle, endAngle: endAngle, clockwise: clockwise)
+        
+        placeholderArcShapeLayer = CAShapeLayer()
+        placeholderArcShapeLayer?.path = placeholderArcBezierPath?.cgPath
+        placeholderArcShapeLayer?.lineWidth = strokeWidth
+        placeholderArcShapeLayer?.strokeStart = 0
+        placeholderArcShapeLayer?.strokeEnd = 0
+        placeholderArcShapeLayer?.strokeColor = bgStrokeColor.cgColor
+        placeholderArcShapeLayer?.fillColor = UIColor.clear.cgColor
+        
+        layer.addSublayer(placeholderArcShapeLayer!)
+    }
+    
+    private func drawFgArc() {
+        progressArcShapeLayer?.removeFromSuperlayer()
+        
+        progressArcBezierPath = UIBezierPath(arcCenter: CGPoint(x: frame.width/2, y: frame.height/2), radius: radius, startAngle: startAngle, endAngle: endAngle, clockwise: clockwise)
+        
+        progressArcShapeLayer = CAShapeLayer()
+        progressArcShapeLayer?.path = progressArcBezierPath?.cgPath
+        progressArcShapeLayer?.lineWidth = strokeWidth
+        progressArcShapeLayer?.strokeStart = 0
+        progressArcShapeLayer?.strokeEnd = 0
+        progressArcShapeLayer?.strokeColor = fgStrokeColor.cgColor
+        progressArcShapeLayer?.fillColor = UIColor.clear.cgColor
+        
+        layer.addSublayer(progressArcShapeLayer!)
+    }
+    
+    public func animate(placeholderArcTo position: CGFloat, in duration: TimeInterval) {
         let animation = CABasicAnimation(keyPath: "strokeEnd")
         animation.duration = duration
-        animation.fromValue = backCircleCurrentStrokeEnd
-        animation.toValue = toPosition
+        animation.fromValue = placeholderArcCurrentStrokeEnd
+        animation.toValue = position
         
-        backCircleCurrentStrokeEnd = toPosition
-        backCircleShapeLayer?.strokeEnd = toPosition
-        backCircleShapeLayer?.add(animation, forKey: "back.stroke.end")
+        placeholderArcCurrentStrokeEnd = position
+        placeholderArcShapeLayer?.strokeEnd = position
+        placeholderArcShapeLayer?.add(animation, forKey: "back.stroke.end")
     }
     
-    public func setFrontCircle(inRect frame: CGRect, radius: CGFloat, minAngle: CGFloat, maxAngle: CGFloat, clockwise: Bool, lineWidth: CGFloat, color: UIColor, lineCapStyle: CGLineCap) {
-        frontCircleShapeLayer?.removeFromSuperlayer()
-        
-        frontCircleRadius = radius
-        frontCircleStartAngle = minAngle
-        frontCircleEndAngle = maxAngle
-    
-        frontCircleBezierPath = UIBezierPath(arcCenter: CGPoint(x: frame.midX, y: frame.midY), radius: radius, startAngle: minAngle, endAngle: maxAngle, clockwise: clockwise)
-        frontCircleBezierPath?.lineCapStyle = lineCapStyle
-        
-        frontCircleShapeLayer = CAShapeLayer()
-        frontCircleShapeLayer?.path = frontCircleBezierPath?.cgPath
-        frontCircleShapeLayer?.lineWidth = lineWidth
-        frontCircleShapeLayer?.strokeStart = 0
-        frontCircleShapeLayer?.strokeEnd = 0
-        frontCircleShapeLayer?.strokeColor = color.cgColor
-        frontCircleShapeLayer?.fillColor = UIColor.clear.cgColor
-        
-        layer.addSublayer(frontCircleShapeLayer!)
-    }
-    
-    public func animateFrontCircle(toPosition: CGFloat, duration: TimeInterval) {
+    public func animate(progressArcTo position: CGFloat, in duration: TimeInterval) {
         let animation = CABasicAnimation(keyPath: "strokeEnd")
         animation.duration = duration
-        animation.fromValue = frontCircleCurrentStrokeEnd
-        animation.toValue = toPosition
+        animation.fromValue = progressArcCurrentStrokeEnd
+        animation.toValue = position
         
-        frontCircleCurrentStrokeEnd = toPosition
-        frontCircleShapeLayer?.strokeEnd = toPosition
-        frontCircleShapeLayer?.add(animation, forKey: "front.stroke.end")
+        progressArcCurrentStrokeEnd = position
+        progressArcShapeLayer?.strokeEnd = position
+        progressArcShapeLayer?.add(animation, forKey: "front.stroke.end")
     }
     
     public override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesBegan(touches, with: event)
         for touch in touches {
             let point = touch.location(in: self)
-            if backCircleBezierPath!.contains(point) {
+            if placeholderArcBezierPath!.contains(point) {
                 print("contains")
                 let centeredPoint = CGPoint(x: (point.x - frame.width/2), y: (point.y - frame.height/2))
                 print(centeredPoint)
@@ -122,8 +132,8 @@ public class UICircularSliderView: UIView {
                 } else if centeredPoint.x > 0 && centeredPoint.y < 0 {
                     rads += CGFloat.pi * 2
                 }
-                let perc = (rads - backCircleStartAngle) / abs(backCircleStartAngle - backCircleEndAngle)
-                frontCircleShapeLayer?.strokeEnd = perc
+                let perc = (rads - startAngle) / abs(startAngle - endAngle)
+                progressArcShapeLayer?.strokeEnd = perc
             }
         }
     }

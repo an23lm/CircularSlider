@@ -16,20 +16,16 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        cs = UICircularSliderView(frame: CGRect(x: 50, y: 50, width: 300, height: 300))
-        cs.backgroundColor = .red
+        cs = UICircularSliderView(radius: 100, startAngle: .pi, endAngle: .pi * 2, clockwise: true, strokeWidth: 5, backgroundStrokeColor: .gray, foregroundStrokeColor: .blue)
+        cs.frame = CGRect(x: 100, y: 200, width: 300, height: 300)
         self.view.addSubview(cs)
-        
-        cs.setBackCircle(inRect: cs.bounds, radius: 100, minAngle: 0, maxAngle: CGFloat.pi * 2, clockwise: true, lineWidth: 10, color: UIColor.white, lineCapStyle: CGLineCap.round)
-        cs.setFrontCircle(inRect: cs.bounds, radius: 100, minAngle: 0, maxAngle: CGFloat.pi * 2, clockwise: true, lineWidth: 10, color: UIColor.blue, lineCapStyle: CGLineCap.round)
-        
     }
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
         
-        cs.animateBackCircle(toPosition: 1, duration: 1.0)
-        cs.animateFrontCircle(toPosition: 1, duration: 1.0)
+        cs.animate(placeholderArcTo: 1.0, in: 1.0)
+        cs.animate(progressArcTo: 0.5, in: 1.0)
     }
 }
 
